@@ -10,10 +10,18 @@ import model.users.User;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public class PlatformService {
     private List<Course> listCourses = new ArrayList<>();
     private List<User> listUsers = new ArrayList<>();
+
+    ProgrammingLanguageCoursesService programmingLanguageCoursesService = ProgrammingLanguageCoursesService.getInstance();
+    ForeignLanguageCoursesService foreignLanguageCoursesService = ForeignLanguageCoursesService.getInstance();
+    AdminsService adminsService = AdminsService.getInstance();
+    StudentsService studentsService = StudentsService.getInstance();
+    TeachersService teachersService = TeachersService.getInstance();
+    QuestionsService questionsService = QuestionsService.getInstance();
 
     private PlatformService(){}
 
@@ -30,9 +38,7 @@ public class PlatformService {
     public void addCourse(Course course) {
         listCourses.add(course);
     }
-    public void addUser(User user) {
-        listUsers.add(user);
-    }
+    public void addUser(User user) { }
 
     public void showAvailableCourses() {
         listCourses.forEach(System.out::println);
@@ -64,16 +70,16 @@ public class PlatformService {
                 .forEach(System.out::println);
     }
 
-    public void showCoursesForStudent(int id) {
-            if(findUser(id).isPresent()) {
-                Student stud = (Student) findUser(id).get();
+    public void showCoursesForStudent(UUID id) {
+            if(findUserById(id).isPresent()) {
+                Student stud = (Student) findUserById(id).get();
                 stud.getCourses()
                     .stream()
                     .forEach(System.out::println);
             }
     }
 
-    public void showStudentsForCourse(int id) {
+    public void showStudentsForCourse(UUID id) {
         if(findCourse(id).isPresent()) {
             Course course = (Course) findCourse(id).get();
             course.getStudentsEnrolled()
@@ -82,36 +88,36 @@ public class PlatformService {
         }
     }
 
-    public void rateTeacher(int id, double rate) {
-        if (findUser(id).isPresent()) {
-            Teacher teacher = (Teacher) findUser(id).get();
+    public void rateTeacher(UUID id, double rate) {
+        if (findUserById(id).isPresent()) {
+            Teacher teacher = (Teacher) findUserById(id).get();
             teacher.setRating(rate);
         }
     }
 
-    public void enrollInACourse(int idCourse, int idStudent) {
+    public void enrollInACourse(UUID idCourse, UUID idStudent) {
         if(findCourse(idCourse).isPresent()) {
             Course course = findCourse(idCourse).get();
-            if(findUser(idStudent).isPresent()) {
-                Student stud = (Student) findUser(idStudent).get();
+            if(findUserById(idStudent).isPresent()) {
+                Student stud = (Student) findUserById(idStudent).get();
                 course.getStudentsEnrolled().add(stud);
                 stud.getCourses().add(course);
             }
         }
     }
 
-    public void dropOutOfACourse(int idCourse, int idStudent) {
+    public void dropOutOfACourse(UUID idCourse, UUID idStudent) {
         if(findCourse(idCourse).isPresent()) {
             Course course = findCourse(idCourse).get();
-            if(findUser(idStudent).isPresent()) {
-                Student stud = (Student) findUser(idStudent).get();
+            if(findUserById(idStudent).isPresent()) {
+                Student stud = (Student) findUserById(idStudent).get();
                 course.getStudentsEnrolled().remove(stud);
                 stud.getCourses().remove(course);
             }
         }
     }
 
-    public Optional<Course> findCourse(int courseId) {
+    public Optional<Course> findCourse(UUID courseId) {
         for (Course course : listCourses) {
             if (course.getId() == courseId)
                 return Optional.of(course);
@@ -119,7 +125,7 @@ public class PlatformService {
         return Optional.empty();
     }
 
-    public Optional<User> findUser(int userId) {
+    public Optional<User> findUserById(UUID userId) {
         for (User user : listUsers) {
             if (user.getId() == userId)
                 return Optional.of(user);
@@ -127,13 +133,21 @@ public class PlatformService {
         return Optional.empty();
     }
 
-    public void deleteCourse(int id) {
+    public Optional<User> findUserByName(String name) {
+        for (User user : listUsers) {
+            if (user.getUsername() == name)
+                return Optional.of(user);
+        }
+        return Optional.empty();
+    }
+
+    public void deleteCourse(UUID id) {
         for (Course course : listCourses){
             listCourses.removeIf(it -> it.getId() == id);
         }
     }
 
-    public void deleteUser(int id) {
+    public void deleteUser(UUID id) {
         for (User user : listUsers){
             listUsers.removeIf(it -> it.getId() == id);
         }
@@ -142,5 +156,19 @@ public class PlatformService {
     public int nbOfCourses() {
         return listCourses.size();
     }
+
+    public void ReadDataFromCSVsOnLoad() {
+            foreignLanguageCoursesService.readForeignLanguageCourse();
+            adminsService.readAdmin();
+            programmingLanguageCoursesService.readProgrammingCourse();
+            questionsService.readQuestion();
+            studentsService.readStudent();
+            teachersService.readTeacher();
+    }
+
+
+    //NU AM AVUT TIMP SA RAFINEZ CODUL SI SA FAC TOT CE MI-AM PROPUS:(
+    //TO DO: REFARCTOR CODE
+    //TO DO: GENERATOR METHODS
 
 }

@@ -1,5 +1,6 @@
 package main;
 
+import audit.AuditService;
 import model.courses.Course;
 import model.courses.ForeignLanguageCourse;
 import model.courses.ProgrammingCourse;
@@ -9,10 +10,16 @@ import model.users.Teacher;
 import service.PlatformService;
 
 import java.util.Scanner;
+import java.util.UUID;
 
 public class Main {
     public static void main(String[] args) {
         Scanner scanner=new Scanner(System.in);
+        PlatformService service = PlatformService.getInstance();
+        AuditService auditService = AuditService.getInstance();
+
+        //on load - > read data from csvs
+        service.ReadDataFromCSVsOnLoad();
 
         System.out.println("Welcome to the E-learning platform! Choose the action most suitable for you!");
 
@@ -22,7 +29,8 @@ public class Main {
             String [] cuv = commamd.split("\\s+");
             switch(cuv[0]){
                 case "exit": System.out.println("Thank you! See you next time!");
-                    System.exit(0);
+                                auditService.logActions("exit");
+                                System.exit(0);
 
                 case "addCourse":   if(cuv[1].equals("foreignLanguage")) {
                                         Course c = new ForeignLanguageCourse();
@@ -37,6 +45,7 @@ public class Main {
                                         PlatformService.getInstance().addCourse(c);
                                         System.out.println("Course Added!");
                                     }
+                                    auditService.logActions("addCourse");
                                     break;
                 case "addUser":    if(cuv[1].equals("Student")) {
                                     Student st = new Student();
@@ -56,36 +65,51 @@ public class Main {
                                         PlatformService.getInstance().addUser(a);
                                         System.out.println("User Added!");
                                      }
+                                     auditService.logActions("addUser");
                                     break;
 
-                case"showCourses": PlatformService.getInstance().showAvailableCourses();
+                case "showCourses": PlatformService.getInstance().showAvailableCourses();
+                                    auditService.logActions("showCourses");
                                     break;
 
                 case "showUsers": PlatformService.getInstance().showAllUsers();
+                                        auditService.logActions("showUsers");
                                     break;
-                case "enrollCourse": PlatformService.getInstance().enrollInACourse(Integer.parseInt(cuv[1]),Integer.parseInt(cuv[2]));
+                case "enrollCourse": PlatformService.getInstance().enrollInACourse(UUID.fromString(cuv[1]),UUID.fromString(cuv[1]));
+                                        auditService.logActions("enrollCourse");
                                      break;
-                case "dropCourse": PlatformService.getInstance().dropOutOfACourse(Integer.parseInt(cuv[1]),Integer.parseInt(cuv[2]));
+                case "dropCourse": PlatformService.getInstance().dropOutOfACourse(UUID.fromString(cuv[1]),UUID.fromString(cuv[1]));
+                                        auditService.logActions("dropCourse");
                                     break;
-                case "deleteCourse":   PlatformService.getInstance().deleteCourse(Integer.parseInt(cuv[1]));
+                case "deleteCourse":   PlatformService.getInstance().deleteCourse(UUID.fromString(cuv[1]));
+                                    auditService.logActions("deleteCourse");
                                     break;
-                case "deleteUser": PlatformService.getInstance().deleteUser(Integer.parseInt(cuv[1]));
+                case "deleteUser": PlatformService.getInstance().deleteUser(UUID.fromString(cuv[1]));
+                                        auditService.logActions("deleteUser");
                                     break;
                 case "nbOfCourses": PlatformService.getInstance().nbOfCourses();
+                                        auditService.logActions("nbOfCourses");
                                      break;
-                case "showCoursesForStudent":  PlatformService.getInstance().showCoursesForStudent(Integer.parseInt(cuv[1]));
+                case "showCoursesForStudent":  PlatformService.getInstance().showCoursesForStudent(UUID.fromString(cuv[1]));
+                                                auditService.logActions("showCoursesForStudent");
                                                break;
-                case "showStudentsForCourse":  PlatformService.getInstance().showStudentsForCourse(Integer.parseInt(cuv[1]));
+                case "showStudentsForCourse":  PlatformService.getInstance().showStudentsForCourse(UUID.fromString(cuv[1]));
+                                                auditService.logActions("showStudentsForCourse");
                                              break;
                 case "showProgrammingCourses":  PlatformService.getInstance().showProgrammingCourses();
+                                                auditService.logActions("showProgrammingCourses");
                                                 break;
                 case "showForeignLanguagesCourses": PlatformService.getInstance().showForeignLanguageCourses();
+                                                    auditService.logActions("showForeignLanguagesCourses");
                                                 break;
                 case "showTeachers": PlatformService.getInstance().showTeachers();
+                                         auditService.logActions("showTeachers");
                                         break;
                 case "showStudents": PlatformService.getInstance().showStudents();
+                                        auditService.logActions("showStudents");
                                     break;
-                case "rateTeacher": PlatformService.getInstance().rateTeacher(Integer.parseInt(cuv[1]),Double.parseDouble(cuv[2]));
+                case "rateTeacher": PlatformService.getInstance().rateTeacher(UUID.fromString(cuv[1]),Double.parseDouble(cuv[2]));
+                                    auditService.logActions("rateTeacher");
                 default: System.out.println("The command you entered is not valid! Try again!");
             }
 

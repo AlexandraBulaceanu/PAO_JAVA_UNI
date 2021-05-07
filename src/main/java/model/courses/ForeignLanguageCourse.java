@@ -8,16 +8,16 @@ import java.util.List;
 import java.util.Objects;
 
 public class ForeignLanguageCourse extends Course{
-    String foreignLanguage;
-    boolean forCertification;
+    private String foreignLanguage;
+    private boolean forCertification;
 
     public ForeignLanguageCourse(String foreignLanguage, boolean forCertification) {
         this.foreignLanguage = foreignLanguage;
         this.forCertification = forCertification;
     }
 
-    public ForeignLanguageCourse(String name, double price, LocalDate startDate, int durationWeeks, Teacher teacherName, List<Student> studentsEnrolled, String description, String foreignLanguage, boolean forCertification) {
-        super(name, price, startDate, durationWeeks, teacherName, studentsEnrolled, description);
+    public ForeignLanguageCourse( String foreignLanguage, double price, LocalDate startDate, int durationWeeks, Teacher teacherName, List<Student> studentsEnrolled, String description, boolean forCertification) {
+        super(price, startDate, durationWeeks, teacherName, studentsEnrolled);
         this.foreignLanguage = foreignLanguage;
         this.forCertification = forCertification;
     }
@@ -28,7 +28,16 @@ public class ForeignLanguageCourse extends Course{
         this.forCertification = forCertification;
     }
 
+
+
     public ForeignLanguageCourse() {
+
+    }
+
+    public ForeignLanguageCourse(double price, LocalDate startDate, int durationWeeks, Teacher teacherName, List<Student> studentsEnrolled, String foreignLanguage, boolean forCertification) {
+        super(price, startDate, durationWeeks, teacherName, studentsEnrolled);
+        this.foreignLanguage = foreignLanguage;
+        this.forCertification = forCertification;
 
     }
 

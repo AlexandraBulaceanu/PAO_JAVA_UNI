@@ -8,10 +8,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public abstract class Course {
 
-        protected int id;
+        protected UUID id; // for generating the unique id without the static contor
         protected String name;
         protected double price;
         protected LocalDate startDate;
@@ -19,15 +20,14 @@ public abstract class Course {
         protected Teacher teacherName;
         protected List<Student> studentsEnrolled;
         protected String description;
-        protected static int nbOfCourses;
         protected Quizz quiz;
 
     public Course() {
-        this.id = ++nbOfCourses;
+        this.id = UUID.randomUUID();
     }
 
     public Course(String name, double price, LocalDate startDate, int durationWeeks, Teacher teacherName, List<Student> studentsEnrolled, String description) {
-        this.id = ++nbOfCourses;
+        this.id = UUID.randomUUID();
         this.name = name;
         this.price = price;
         this.startDate = startDate;
@@ -40,20 +40,32 @@ public abstract class Course {
         }
     }
 
+    public Course(double price, LocalDate startDate, int durationWeeks, Teacher teacherName, List<Student> studentsEnrolled) {
+        this.id = UUID.randomUUID();
+        this.price = price;
+        this.startDate = startDate;
+        this.durationWeeks = durationWeeks;
+        this.teacherName = teacherName;
+        this.studentsEnrolled = new ArrayList<Student>();
+        for(int i = 0; i < studentsEnrolled.size(); i++) {
+            this.studentsEnrolled.add(studentsEnrolled.get(i));
+        }
+    }
+
     public Course(String name, double price, String description) {
-        this.id = ++nbOfCourses;
+        this.id = UUID.randomUUID();
         this.name = name;
         this.price = price;
         this.description = description;
     }
 
-    public int getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(int id) {
+    /*public void setId(int id) {
         this.id = id;
-    }
+    }*/
 
     public String getName() {
         return name;

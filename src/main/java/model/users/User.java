@@ -6,23 +6,23 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public abstract class User {
-    protected int id;
+    protected UUID id;
     protected String username;
     protected LocalDate birthday;
     protected String adress;
     protected String email;
     protected String phoneNumber;
-    protected static int nbOfUsers;
     protected List<Course> courses;
 
     public User() {
-        this.id = ++nbOfUsers;
+        this.id = UUID.randomUUID();
     }
 
     public User(String username) {
-        this.id = ++nbOfUsers;
+        this.id = UUID.randomUUID();
         this.username = username;
     }
 
@@ -35,14 +35,14 @@ public abstract class User {
     }
 
 
-    public int getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(int id) {
+   /* public void setId(int id) {
         this.id = id;
     }
-
+    */
     public String getUsername() {
         return username;
     }
@@ -83,13 +83,13 @@ public abstract class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public static int getNbOfUsers() {
+    /*public static  getNbOfUsers() {
         return nbOfUsers;
     }
 
     public static void setNbOfUsers(int nbOfUsers) {
         User.nbOfUsers = nbOfUsers;
-    }
+    }*/
 
 
     public List<Course> getCourses() { //TODO: change to Optional

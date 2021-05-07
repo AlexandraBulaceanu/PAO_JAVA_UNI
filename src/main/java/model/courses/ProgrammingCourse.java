@@ -13,6 +13,8 @@ public class ProgrammingCourse extends Course{
     private String ide;
     private int nbOfPracticalLabs;
 
+    //TO DO: CREATE FACTORY FOR MULTIPLE CONSTRUCTOR PARAMETERS
+
     public ProgrammingCourse(String programmingLanguage, double languageVersion, String ide, int nbOfPracticalLabs) {
         this.programmingLanguage = programmingLanguage;
         this.languageVersion = languageVersion;
@@ -22,6 +24,14 @@ public class ProgrammingCourse extends Course{
 
     public ProgrammingCourse(String name, double price, LocalDate startDate, int durationWeeks, Teacher teacherName, List<Student> studentsEnrolled, String description, String programmingLanguage, double languageVersion, String ide, int nbOfPracticalLabs) {
         super(name, price, startDate, durationWeeks, teacherName, studentsEnrolled, description);
+        this.programmingLanguage = programmingLanguage;
+        this.languageVersion = languageVersion;
+        this.ide = ide;
+        this.nbOfPracticalLabs = nbOfPracticalLabs;
+    }
+
+    public ProgrammingCourse(String programmingLanguage, double price, LocalDate startDate, int durationWeeks, Teacher teacherName, List<Student> studentsEnrolled, double languageVersion, String ide, int nbOfPracticalLabs) {
+        super(price, startDate, durationWeeks, teacherName, studentsEnrolled);
         this.programmingLanguage = programmingLanguage;
         this.languageVersion = languageVersion;
         this.ide = ide;

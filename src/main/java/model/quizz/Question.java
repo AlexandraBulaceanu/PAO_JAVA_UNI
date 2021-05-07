@@ -12,15 +12,11 @@ public class Question {
         this.questionText = questionText;
     }
 
-    public boolean checkAnswer(int[] studChoices) {
-        if(studChoices.length != correctAnswers.length)
-            return false;
-        Arrays.sort(studChoices);
-        Arrays.sort(correctAnswers);
-        for(int i = 0; i < this.correctAnswers.length; i++) {
-            if(studChoices[i] != correctAnswers[i]) return false;
-        } //Arrays.equals()
-        return true;
+
+    public Question(String questionText, String[] choices, int[] correctAnswers) {
+        this.questionText = questionText;
+        this.choices = choices;
+        this.correctAnswers = correctAnswers;
     }
 
     public String getQuestionText() {
