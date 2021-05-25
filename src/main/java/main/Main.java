@@ -8,7 +8,9 @@ import model.users.Admin;
 import model.users.Student;
 import model.users.Teacher;
 import service.PlatformService;
+import service.StudentsService;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -17,6 +19,7 @@ public class Main {
         Scanner scanner=new Scanner(System.in);
         PlatformService service = PlatformService.getInstance();
         AuditService auditService = AuditService.getInstance();
+        StudentsService studentsService = StudentsService.getInstance();
 
         //on load - > read data from csvs
         service.ReadDataFromCSVsOnLoad();
@@ -33,15 +36,19 @@ public class Main {
                                 System.exit(0);
 
                 case "addCourse":   if(cuv[1].equals("foreignLanguage")) {
-                                        Course c = new ForeignLanguageCourse();
+                                        ForeignLanguageCourse c = new ForeignLanguageCourse();
                                         c.setName(cuv[2]);
-                                        c.setPrice(Double.parseDouble(cuv[3]));
+                                        c.setForeignLanguage(cuv[3]);
+                                        c.setStudentsEnrolled(new ArrayList<>());
+                                        c.setPrice(Double.parseDouble(cuv[4]));
                                         PlatformService.getInstance().addCourse(c);
                                         System.out.println("Course Added!");
                                     } else {
-                                        Course c = new ProgrammingCourse();
+                                        ProgrammingCourse c = new ProgrammingCourse();
                                         c.setName(cuv[2]);
-                                        c.setPrice(Double.parseDouble(cuv[3]));
+                                        c.setProgrammingLanguage(cuv[3]);
+                                        c.setStudentsEnrolled(new ArrayList<>());
+                                        c.setPrice(Double.parseDouble(cuv[4]));
                                         PlatformService.getInstance().addCourse(c);
                                         System.out.println("Course Added!");
                                     }
@@ -51,12 +58,17 @@ public class Main {
                                     Student st = new Student();
                                     st.setUsername(cuv[2]);
                                     st.setUniversity(cuv[3]);
+                                    st.setEmail(cuv[4]);
+                                    st.setYearOfStudy(Integer.parseInt(cuv[5]));
                                     PlatformService.getInstance().addUser(st);
+                                    studentsService.writeStudent(st.getUsername(),service.generateBirthday(),st.getAdress(),st.getEmail(),st.getPhoneNumber(),st.getUniversity(),st.getYearOfStudy(),st.getDegree());
                                     System.out.println("User Added!");
                                     } else if(cuv[1].equals("Teacher")){
                                         Teacher t = new Teacher();
                                         t.setUsername(cuv[2]);
-                                        t.setYearsOfExperience(Integer.parseInt(cuv[3]));
+                                        t.setEmail(cuv[3]);
+                                        t.setYearsOfExperience(Integer.parseInt(cuv[4]));
+                                        t.setRating(Double.parseDouble(cuv[5]));
                                         PlatformService.getInstance().addUser(t);
                                         System.out.println("User Added!");
                                     } else {

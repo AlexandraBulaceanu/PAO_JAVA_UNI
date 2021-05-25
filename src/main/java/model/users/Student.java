@@ -8,6 +8,7 @@ public class Student extends User{
     private String degree;
 
     public Student() {
+
     }
 
     public Student(String username) {
@@ -36,6 +37,12 @@ public class Student extends User{
         this.university = university;
         this.yearOfStudy = yearOfStudy;
         this.degree = degree;
+    }
+
+    public Student(String username,String email,String university,int yearOfStudy) {
+        super(username,email);
+        this.university = university;
+        this.yearOfStudy = yearOfStudy;
     }
 
     public String getUniversity() {

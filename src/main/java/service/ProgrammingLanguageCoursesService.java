@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,7 +21,8 @@ public class ProgrammingLanguageCoursesService {
     ReadingCSVService csvReader = ReadingCSVService.getInstance();
     WritingCSVService csvWriter = WritingCSVService.getInstance();
     PlatformService service = PlatformService.getInstance();
-    Path path = Paths.get("../csvFiles/programmingCourses.csv");
+    Path path = Paths.get("src/main/java/csvFiles/programmingCourses.csv");
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
 
     private ProgrammingLanguageCoursesService()
@@ -44,7 +46,7 @@ public class ProgrammingLanguageCoursesService {
                 languageVersion, ide, nbOfPracticalLabs));
 
         List<String> record = Arrays.asList(String.valueOf(programmingCourses.get(programmingCourses.size() - 1).getId()),
-                programmingLanguage, String.valueOf(price), new SimpleDateFormat("dd/MM/yyyy").format(startDate),
+                programmingLanguage, String.valueOf(price), startDate.format(formatter),
                 String.valueOf(durationWeeks), teacher.getUsername(), String.valueOf(languageVersion), ide, String.valueOf(nbOfPracticalLabs));
 
         for (var student : studentsEnrolled) {
@@ -65,7 +67,7 @@ public class ProgrammingLanguageCoursesService {
                 int id = Integer.parseInt(record.get(0));
                 String programmingLanguage = record.get(1);
                 double price = Double.parseDouble(record.get(2));
-                LocalDate startDate = LocalDate.parse(record.get(3));
+                LocalDate startDate = LocalDate.parse(record.get(3),formatter);
                 int durationWeeks= Integer.parseInt(record.get(4));
                 String teacherName = record.get(5);
                 double languageVersion = Double.parseDouble(record.get(6));
@@ -74,16 +76,25 @@ public class ProgrammingLanguageCoursesService {
 
                 List<Student> studentsEnrolled = new ArrayList<>();
 
+                service = PlatformService.getInstance();
                 for(int i = 8; i < record.size(); i++) {
-                    Student stud = (Student)service.findUserByName(record.get(i)).get();
-                    studentsEnrolled.add(stud);
+                    if(service.findUserByName(record.get(i)).isPresent()) {
+                        Student stud = (Student) service.findUserByName(record.get(i)).get();
+                        studentsEnrolled.add(stud);
+                    }
                 }
 
                 Optional<User> user = service.findUserByName(teacherName);
-                User user2 =  user.get();
-                Teacher teacher = (Teacher)user2;
+                if(user.isPresent()) {
+                    User user2 =  user.get();
+                    Teacher teacher = (Teacher)user2;
+                    programmingCourses.add(new ProgrammingCourse(programmingLanguage, price, startDate, durationWeeks, teacher, studentsEnrolled, languageVersion, ide, nbOfPracticalLabs));
+                }
+                else {
+                    programmingCourses.add(new ProgrammingCourse(programmingLanguage,languageVersion,ide,nbOfPracticalLabs));
+                }
 
-                programmingCourses.add(new ProgrammingCourse(programmingLanguage, price, startDate, durationWeeks, teacher, studentsEnrolled, languageVersion, ide, nbOfPracticalLabs));
+
 
             }
         } catch (DateTimeParseException e) {

@@ -6,6 +6,7 @@ public class Admin extends User{
     private int privilegeDegree;
 
     public Admin() {
+        super();
     }
 
     public Admin(String username) {
@@ -17,6 +18,7 @@ public class Admin extends User{
     }
 
     public Admin(int privilegeDegree) {
+        super();
         this.privilegeDegree = privilegeDegree;
     }
 

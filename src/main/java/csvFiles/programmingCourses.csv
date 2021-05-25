@@ -1,3 +1,3 @@
-550.50, 26/02/2021, 12, Mihaela, Popescu; Alexandru; Ioan; Anton; David; Silviu; OOP-Java, 8.00,  InteliJ, 8
-750.45, 25/04/2021, 14, Ionut, Cristina; Petru; Gabi; Cornel; Narcis; Pavel; C++, 17.00, VS Code, 12
-350.44, 27/05/2021, 8, Andra, Eva; Magdalena; Cesima; Binaca; Camelia; Silvia, C#, 8.00, VS Code, 8
+0, OOP-Java, 550.50, 26/02/2021, 12, Mihaela, 8.00,  InteliJ, 8, Popescu; Alexandru; Ioan; Anton; David; Silviu
+1, C++, 750.45, 25/04/2021, 14, Ionut, 17.00, VS Code, 12, Cristina; Petru; Gabi; Cornel; Narcis; Pavel
+2, C#, 350.44, 27/05/2021, 8, Andra, 8.00, VS Code, 8, Eva; Magdalena; Cesima; Binaca; Camelia, Silvia

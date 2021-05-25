@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +16,8 @@ public class TeachersService {
     public static List<Teacher> teachers = new ArrayList<>();
     ReadingCSVService csvReader = ReadingCSVService.getInstance();
     WritingCSVService csvWriter = WritingCSVService.getInstance();
-    Path path = Paths.get("../csvFiles/teachers.csv");
+    Path path = Paths.get("src/main/java/csvFiles/teachers.csv");
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
 
     private TeachersService()
@@ -37,7 +39,7 @@ public class TeachersService {
         teachers.add(new Teacher(username, birthday, address, email, phoneNumber, yearsOfExperience, rating));
 
         List<String> record = Arrays.asList(String.valueOf(teachers.get(teachers.size() - 1).getId()),
-                                            username, new SimpleDateFormat("dd/MM/yyyy").format(birthday),
+                                            username, birthday.format(formatter),
                                             address, email, phoneNumber, String.valueOf(yearsOfExperience), String.valueOf(rating));
 
         csvWriter.writeToCSV(path, record);
@@ -53,7 +55,7 @@ public class TeachersService {
             for (List<String> record : records) {
                 int id = Integer.parseInt(record.get(0));
                 String username = record.get(1);
-                LocalDate birthday = LocalDate.parse(record.get(2));
+                LocalDate birthday = LocalDate.parse(record.get(2),formatter);
                 String address = record.get(3);
                 String email = record.get(4);
                 String phoneNumber = record.get(5);

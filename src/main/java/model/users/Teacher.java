@@ -7,6 +7,7 @@ public class Teacher extends User{
     private double rating;
 
     public Teacher() {
+        super();
     }
 
     public Teacher(String username) {
@@ -18,6 +19,7 @@ public class Teacher extends User{
     }
 
     public Teacher(int yearsOfExperience, double rating) {
+        super();
         this.yearsOfExperience = yearsOfExperience;
         this.rating = rating;
     }
@@ -31,6 +33,11 @@ public class Teacher extends User{
     public Teacher(String username, LocalDate birthday, String adress, String email, String phoneNumber, int yearsOfExperience, double rating) {
         super(username, birthday, adress, email, phoneNumber);
         this.yearsOfExperience = yearsOfExperience;
+        this.rating = rating;
+    }
+
+    public Teacher(String username,String email,double rating) {
+        super(username,email);
         this.rating = rating;
     }
 

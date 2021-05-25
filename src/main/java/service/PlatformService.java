@@ -1,5 +1,9 @@
 package service;
 
+import dao.LanguageCourseDAO;
+import dao.ProgrammingCourseDAO;
+import dao.StudentDAO;
+import dao.TeacherDAO;
 import model.courses.Course;
 import model.courses.ForeignLanguageCourse;
 import model.courses.ProgrammingCourse;
@@ -7,10 +11,9 @@ import model.users.Student;
 import model.users.Teacher;
 import model.users.User;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.sql.Connection;
+import java.time.LocalDate;
+import java.util.*;
 
 public class PlatformService {
     private List<Course> listCourses = new ArrayList<>();
@@ -22,6 +25,8 @@ public class PlatformService {
     StudentsService studentsService = StudentsService.getInstance();
     TeachersService teachersService = TeachersService.getInstance();
     QuestionsService questionsService = QuestionsService.getInstance();
+
+    Connection con = DBService.getInstance().getCon();
 
     private PlatformService(){}
 
@@ -36,12 +41,31 @@ public class PlatformService {
     }
 
     public void addCourse(Course course) {
+        if(course instanceof ProgrammingCourse) {
+            ProgrammingCourseDAO programmingCourseDAO = new ProgrammingCourseDAO(con);
+            programmingCourseDAO.insertProgrammingCourse((ProgrammingCourse)course);
+        }else {
+            LanguageCourseDAO languageCourseDAO = new LanguageCourseDAO(con);
+            languageCourseDAO.insertForeignLanguageCourse((ForeignLanguageCourse)course);
+        }
         listCourses.add(course);
     }
-    public void addUser(User user) { }
+
+    public void addUser(User user) {
+        if(user instanceof Student){
+            StudentDAO studentDAO = new StudentDAO(con);
+            studentDAO.insertStudent((Student)user);
+        }else if(user instanceof Teacher) {
+            TeacherDAO teacherDAO = new TeacherDAO(con);
+            teacherDAO.insertTeacher((Teacher)user);
+        }
+        listUsers.add(user);
+
+    }
 
     public void showAvailableCourses() {
         listCourses.forEach(System.out::println);
+
     }
 
     public void showAllUsers() {
@@ -52,22 +76,39 @@ public class PlatformService {
         listCourses.stream()
                  .filter(c -> c instanceof ProgrammingCourse)
                  .forEach(System.out::println);
+        System.out.println("Now from db");
+        ProgrammingCourseDAO programmingCourseDAO = new ProgrammingCourseDAO(con);
+        List<ProgrammingCourse> programmingList = programmingCourseDAO.getAllProgrammingCourses();
+        for(var course : programmingList) {
+            System.out.println(course);
+        }
     }
     public void showForeignLanguageCourses() {
         listCourses.stream()
                 .filter(c -> c instanceof ForeignLanguageCourse)
                 .forEach(System.out::println);
+        System.out.println("Now from db");
+        LanguageCourseDAO languageCourseDAO = new LanguageCourseDAO(con);
+        List<ForeignLanguageCourse> languagesList = languageCourseDAO.getAllForeignLanguageCourses();
+        for(var course : languagesList) {
+            System.out.println(course);
+        }
     }
 
     public void showTeachers() {
         listUsers.stream()
                 .filter(t -> t instanceof Teacher)
                 .forEach(System.out::println);
+        System.out.println("Now from db");
+        TeacherDAO teacherDAO = new TeacherDAO(con);
+        teacherDAO.getAllTeachers().forEach(System.out::println);
     }
     public void showStudents() {
         listUsers.stream()
                 .filter(s -> s instanceof Student)
                 .forEach(System.out::println);
+        StudentDAO studentDAO = new StudentDAO(con);
+        studentDAO.getAllStudents().forEach(System.out::println);
     }
 
     public void showCoursesForStudent(UUID id) {
@@ -153,15 +194,38 @@ public class PlatformService {
         }
     }
 
+    public void deleteStudentFromDB(String username) {
+        StudentDAO studentDAO = new StudentDAO(con);
+        studentDAO.deleteStudents(username);
+    }
+
+    public void updateStudent(Student std) {
+        StudentDAO studentDAO = new StudentDAO(con);
+        studentDAO.updateStudent(std);
+
+    }
+
     public int nbOfCourses() {
         return listCourses.size();
+    }
+
+
+
+    public LocalDate generateBirthday() {
+        Random random = new Random();
+        int miniDay = (int) LocalDate.of(1900, 1, 1).toEpochDay();
+        int maxiDay = (int) LocalDate.of(2021, 1, 1).toEpochDay();
+        long generatedDay = miniDay + random.nextInt(maxiDay - miniDay);
+        LocalDate generatedBirthDate = LocalDate.ofEpochDay(generatedDay);
+        return generatedBirthDate;
+
     }
 
     public void ReadDataFromCSVsOnLoad() {
             foreignLanguageCoursesService.readForeignLanguageCourse();
             adminsService.readAdmin();
             programmingLanguageCoursesService.readProgrammingCourse();
-            questionsService.readQuestion();
+            //questionsService.readQuestion();
             studentsService.readStudent();
             teachersService.readTeacher();
     }

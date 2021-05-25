@@ -46,6 +46,11 @@ public class ProgrammingCourse extends Course{
         this.nbOfPracticalLabs = nbOfPracticalLabs;
     }
 
+    public ProgrammingCourse(String programmingLanguage,List<Student> studentsEnrolled,double price){
+        super(studentsEnrolled,price);
+        this.programmingLanguage = programmingLanguage;
+    }
+
     public ProgrammingCourse() {
     }
 

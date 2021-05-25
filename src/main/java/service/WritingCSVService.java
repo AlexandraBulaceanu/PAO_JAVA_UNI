@@ -29,15 +29,17 @@ public class WritingCSVService {
     public void writeToCSV(Path csvPath, List<String> record) {
 
         try(BufferedWriter writer = new BufferedWriter((Files.newBufferedWriter(csvPath,CREATE,APPEND)))){
-            for(String value : record) {
-                writer.append(String.join(", ", value));//the delimiter is a ',' as it is a csv
-                writer.append("\n");
+            for(int i = 0; i < record.size(); i++) {
+                if(i!=record.size() - 1) {
+                    writer.append(record.get(i));//the delimiter is a ',' as it is a csv
+                    writer.append(", ");
+                }
+                else writer.append(record.get(i) + "\n");
             }
-
+            writer.flush();
         }catch(IOException e) {
             e.printStackTrace();
         }
     }
-
 
 }

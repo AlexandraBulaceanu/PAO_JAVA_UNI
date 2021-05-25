@@ -59,6 +59,15 @@ public abstract class Course {
         this.description = description;
     }
 
+    public Course(List<Student> studentsEnrolled, double price){
+        this.id = UUID.randomUUID();
+        this.price = price;
+        this.studentsEnrolled = new ArrayList<>();
+        for(int i = 0; i < studentsEnrolled.size(); i++) {
+            this.studentsEnrolled.add(studentsEnrolled.get(i));
+        }
+    }
+
     public UUID getId() {
         return id;
     }

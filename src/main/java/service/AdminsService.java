@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +16,8 @@ public class AdminsService {
     public static List<Admin> admins = new ArrayList<>();
     ReadingCSVService csvReader = ReadingCSVService.getInstance();
     WritingCSVService csvWriter = WritingCSVService.getInstance();
-    Path path = Paths.get("../csvFiles/admins.csv");
+    Path path = Paths.get("src/main/java/csvFiles/admins.csv");
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
 
     private AdminsService()
@@ -37,7 +39,7 @@ public class AdminsService {
         admins.add(new Admin(username, birthday, address, email, phoneNumber, privilegeDegree));
 
         List<String> record = Arrays.asList(String.valueOf(admins.get(admins.size() - 1).getId()),
-                username, new SimpleDateFormat("dd/MM/yyyy").format(birthday),
+                username, birthday.format(formatter),
                 address, email, phoneNumber, String.valueOf(privilegeDegree));
 
         csvWriter.writeToCSV(path, record);
@@ -53,7 +55,7 @@ public class AdminsService {
             for (List<String> record : records) {
                 int id = Integer.parseInt(record.get(0));
                 String username = record.get(1);
-                LocalDate birthday = LocalDate.parse(record.get(2));
+                LocalDate birthday = LocalDate.parse(record.get(2),formatter);
                 String address = record.get(3);
                 String email = record.get(4);
                 String phoneNumber = record.get(5);

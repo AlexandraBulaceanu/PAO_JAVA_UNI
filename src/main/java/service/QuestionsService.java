@@ -37,7 +37,7 @@ public class QuestionsService {
     public static List<Question> questions = new ArrayList<>();
     ReadingCSVService csvReader = ReadingCSVService.getInstance();
     WritingCSVService csvWriter = WritingCSVService.getInstance();
-    Path path = Paths.get("../csvFiles/questions.csv");
+    Path path = Paths.get("src/main/java/csvFiles/questions.csv");
 
 
     public void writeQuestion(String questionText, String[] choices, int[] correctAnswers)  {

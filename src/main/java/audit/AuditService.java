@@ -19,7 +19,8 @@ public class AuditService {
 
     private AuditService() {
 
-        Path p = Paths.get("../csvFiles/audit.csv");
+        Path p = Paths.get("src/main/java/csvFiles/audit.csv");
+        System.out.println(p);
         try {
             csvWriter = new BufferedWriter(Files.newBufferedWriter(p, CREATE, APPEND));
         } catch (IOException e) {

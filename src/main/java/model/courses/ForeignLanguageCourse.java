@@ -27,7 +27,10 @@ public class ForeignLanguageCourse extends Course{
         this.foreignLanguage = foreignLanguage;
         this.forCertification = forCertification;
     }
-
+    public ForeignLanguageCourse(String foreignLanguage,List<Student> studentsEnrolled,double price){
+        super(studentsEnrolled,price);
+        this.foreignLanguage = foreignLanguage;
+    }
 
 
     public ForeignLanguageCourse() {

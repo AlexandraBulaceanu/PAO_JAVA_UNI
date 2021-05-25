@@ -17,8 +17,10 @@ public abstract class User {
     protected String phoneNumber;
     protected List<Course> courses;
 
-    public User() {
+    public User(String username, String email) {
         this.id = UUID.randomUUID();
+        this.username = username;
+        this.email = email;
     }
 
     public User(String username) {
@@ -27,6 +29,7 @@ public abstract class User {
     }
 
     public User(String username, LocalDate birthday, String adress, String email, String phoneNumber) {
+        this.id = UUID.randomUUID();
         this.username = username;
         this.birthday = birthday;
         this.adress = adress;
@@ -34,15 +37,19 @@ public abstract class User {
         this.phoneNumber = phoneNumber;
     }
 
+    public User() {
+        this.id = UUID.randomUUID();
+    }
+
 
     public UUID getId() {
         return id;
     }
 
-   /* public void setId(int id) {
+   /*public void setId(int id) {
         this.id = id;
-    }
-    */
+    }*/
+
     public String getUsername() {
         return username;
     }
